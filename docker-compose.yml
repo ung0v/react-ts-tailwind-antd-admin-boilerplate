@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - store-front
+  store-front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3003:3003
+    environment:
+      NODE_ENV: production
