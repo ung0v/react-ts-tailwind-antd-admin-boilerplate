@@ -7,6 +7,7 @@ import _ from 'lodash'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useUserStore } from '~/stores'
 import { useSignIn } from '../sign-in.service'
+import { ALL_PAGE_ROUTES } from '~/constants'
 
 export const SignInForm = () => {
   const [searchParams] = useSearchParams()
@@ -16,33 +17,35 @@ export const SignInForm = () => {
   const { setToken, setUserStates } = useUserStore()
   const [form] = Form.useForm()
   const onFinish = (formValues: any) => {
-    mutateAsync(_.pick(formValues, ['username', 'password']))
-      .then((res) => {
-        if (res.data) {
-          const { access_token: accessToken, refresh_token: refreshToken } =
-            res.data
-          const {
-            Name: name,
-            Email: email,
-            Username: username,
-            Address: address,
-            RoleID: role
-          }: any = jwtDecode(accessToken) || {}
-          setToken({ accessToken, refreshToken })
-          setUserStates({ isLogin: true, name, email, username, address, role })
-          if (returnUrl) {
-            navigate(new URL(returnUrl).pathname)
-          }
-        }
-      })
-      .catch(() => {
-        form.setFields([
-          {
-            name: ['password'],
-            errors: ['Wrong username or password.']
-          }
-        ])
-      })
+    navigate(ALL_PAGE_ROUTES.ADMIN_BRAND)
+    setUserStates({ isLogin: true })
+    // mutateAsync(_.pick(formValues, ['username', 'password']))
+    //   .then((res) => {
+    //     if (res.data) {
+    //       const { access_token: accessToken, refresh_token: refreshToken } =
+    //         res.data
+    //       const {
+    //         Name: name,
+    //         Email: email,
+    //         Username: username,
+    //         Address: address,
+    //         RoleID: role
+    //       }: any = jwtDecode(accessToken) || {}
+    //       setToken({ accessToken, refreshToken })
+    //       setUserStates({ isLogin: true, name, email, username, address, role })
+    //       if (returnUrl) {
+    //         navigate(new URL(returnUrl).pathname)
+    //       }
+    //     }
+    //   })
+    //   .catch(() => {
+    //     form.setFields([
+    //       {
+    //         name: ['password'],
+    //         errors: ['Wrong username or password.']
+    //       }
+    //     ])
+    //   })
   }
 
   return (

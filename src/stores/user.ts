@@ -1,13 +1,9 @@
-import { isFunction } from 'lodash'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { ROLE } from '~/constants'
-import { ProductSchemaType } from '~/types'
 
 export type UserState = {
   username: string
-  cart: ProductSchemaType[]
-  tempCart: ProductSchemaType | null
   accessToken: string
   refreshToken: string
   isLogin: boolean
@@ -19,22 +15,13 @@ export type UserState = {
 
 export type UserDispatch = {
   setUserStates: (value: Partial<UserState>) => void
-  setCart: (
-    fn: ((prev: ProductSchemaType[]) => ProductSchemaType[]) | UserState['cart']
-  ) => void
-  setTempCart: (
-    fn:
-      | ((prev: ProductSchemaType | null) => ProductSchemaType | null)
-      | UserState['tempCart']
-  ) => void
+
   reset: () => void
   setToken: (token: { accessToken: string; refreshToken: string }) => void
 }
 
 export const initialUserState: UserState = {
   username: '',
-  cart: [],
-  tempCart: null,
   accessToken: '',
   refreshToken: '',
   isLogin: false,
@@ -61,24 +48,6 @@ export const useUserStore = create<
           ...state,
           accessToken,
           refreshToken
-        })),
-      setCart: (
-        fn:
-          | ((prev: ProductSchemaType[]) => ProductSchemaType[])
-          | UserState['cart']
-      ) =>
-        set((state) => ({
-          ...state,
-          cart: isFunction(fn) ? fn(state.cart) : fn
-        })),
-      setTempCart: (
-        fn:
-          | ((prev: ProductSchemaType | null) => ProductSchemaType | null)
-          | UserState['tempCart']
-      ) =>
-        set((state) => ({
-          ...state,
-          tempCart: isFunction(fn) ? fn(state.tempCart) : fn
         })),
       reset: () => set(initialUserState)
     }),

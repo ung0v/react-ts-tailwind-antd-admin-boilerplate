@@ -12,8 +12,6 @@ export const API_ROUTES = {
 export const PAGE_ROUTES = {
   PUBLIC: {
     HOME: '/',
-    PRODUCT: '/product/:id',
-    CATEGORIES: '/categories',
     CHECKOUT: '/checkout',
     BUY_NOW: '/buy-now',
     SIGN_IN: '/sign-in',

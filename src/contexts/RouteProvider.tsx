@@ -16,6 +16,10 @@ const router = createBrowserRouter([
         element: <CommonLayout />,
         children: [
           {
+            path: ALL_PAGE_ROUTES.HOME,
+            element: <SignIn />
+          },
+          {
             path: ALL_PAGE_ROUTES.SIGN_IN,
             element: <SignIn />
           },

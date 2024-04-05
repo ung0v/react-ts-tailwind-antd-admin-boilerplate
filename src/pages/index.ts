@@ -1,5 +1,4 @@
 export * from './admin'
 export * from './not-found'
-export * from './orders'
 export * from './sign-in'
 export * from './sign-up'
