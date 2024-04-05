@@ -11,8 +11,10 @@ import {
   useGetBrands
 } from './brand.service'
 import { CreateNewBrand } from './components'
+import { useI18n } from '~/hooks/useI18n'
 
 export const Brand = () => {
+  const { t } = useI18n()
   const toast = useToast()
   const modal = useModal(FormModal)
   const { data, isLoading, refetch } = useGetBrands()
@@ -89,7 +91,7 @@ export const Brand = () => {
     return (
       <>
         <Button icon={<PlusOutlined />} type='primary' onClick={onCreate}>
-          Add
+          {t('A.k.a')}
         </Button>
       </>
     )
@@ -102,7 +104,6 @@ export const Brand = () => {
       columns={columns}
       dataSource={data?.data}
       total={data?.pagination.total}
-      pagination={{ position: ['bottomCenter'] }}
     />
   )
 }

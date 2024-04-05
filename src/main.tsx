@@ -10,6 +10,7 @@ import {
   NotificationProvider,
   ToastProvider
 } from './contexts'
+import './i18n.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -1,6 +1,7 @@
+import { omit } from 'lodash'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { ROLE } from '~/constants'
+import { LOCALES, ROLE } from '~/constants'
 
 export type UserState = {
   username: string
@@ -11,13 +12,14 @@ export type UserState = {
   email: string
   address: string
   role: ROLE | null
+  locale: LOCALES
 }
 
 export type UserDispatch = {
   setUserStates: (value: Partial<UserState>) => void
-
   reset: () => void
   setToken: (token: { accessToken: string; refreshToken: string }) => void
+  setLocale: (locale: LOCALES) => void
 }
 
 export const initialUserState: UserState = {
@@ -28,7 +30,8 @@ export const initialUserState: UserState = {
   name: '',
   email: '',
   address: '',
-  role: null
+  role: null,
+  locale: LOCALES.ENGLIGH
 }
 
 export const useUserStore = create<
@@ -49,7 +52,12 @@ export const useUserStore = create<
           accessToken,
           refreshToken
         })),
-      reset: () => set(initialUserState)
+      reset: () => set(omit(initialUserState, ['locale'])),
+      setLocale: (locale: LOCALES) =>
+        set((state) => ({
+          ...state,
+          locale
+        }))
     }),
     {
       name: 'user', // name of the item in the storage (must be unique)
