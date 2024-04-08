@@ -6,6 +6,20 @@ const theme: ThemeConfig = {
     Typography: {
       titleMarginTop: 0,
       titleMarginBottom: 0
+    },
+    Input: {
+      // controlHeight: 56,
+      // paddingInline: 20
+    },
+    Form: {
+      itemMarginBottom: 24,
+      verticalLabelPadding: '0 0 24px 0',
+      labelFontSize: 16,
+      labelHeight: 22
+    },
+    Button: {
+      // controlHeight: 56,
+      // fontSize: 16
     }
   }
 }

@@ -29,6 +29,7 @@ i18n
     ns: ['common'],
     defaultNS,
     resources
+    // nsSeparator: ':'
   })
 
 export default i18n

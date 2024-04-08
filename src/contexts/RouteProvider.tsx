@@ -6,7 +6,7 @@ import {
 import { AuthProvider } from '.'
 import { ALL_PAGE_ROUTES } from '../constants'
 import { AdminLayout, CommonLayout } from '../layouts'
-import { Brand, NotFoundPage, SignIn, SignUp } from '../pages'
+import { NotFoundPage, SignIn, SignUp, UserManagement } from '../pages'
 
 const router = createBrowserRouter([
   {
@@ -34,11 +34,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: ALL_PAGE_ROUTES.ADMIN_HOME,
-            element: <Brand />
+            element: <UserManagement />
           },
           {
-            path: ALL_PAGE_ROUTES.ADMIN_BRAND,
-            element: <Brand />
+            path: ALL_PAGE_ROUTES.ADMIN_USER_MANAGEMENT,
+            element: <UserManagement />
           }
         ]
       }

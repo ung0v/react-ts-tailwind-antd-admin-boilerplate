@@ -5,7 +5,10 @@ export const API_ROUTES = {
   SIGN_UP: '/sign_up',
   UPLOAD: '/upload',
   BRAND: '/brand',
-  BRAND_ID: '/brand/:id'
+  BRAND_ID: '/brand/:id',
+  ADMIN_SIGN_IN: '/admins/auths/sign-in',
+  ADMIN_USERS: '/admins/users',
+  ADMIN_USERS_ID: '/admins/users/:userId'
 } as const
 
 // All Page routes of applications
@@ -20,7 +23,8 @@ export const PAGE_ROUTES = {
   },
   PRIVATE: {
     ADMIN_HOME: '/admin/',
-    ADMIN_BRAND: '/admin/brand'
+    ADMIN_USER_MANAGEMENT: '/admin/user',
+    ADMIN_CREW_MANAGEMENT: '/admin/crew'
   }
 }
 

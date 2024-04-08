@@ -1,8 +1,11 @@
-import { ApiLogin } from '~/__generated__/types.example'
+import {
+  AdminSignInRequestBodyDto,
+  AdminSignInResponseDto
+} from '~/__generated__/types'
 import { API_ROUTES } from '~/constants'
 import { usePost } from '~/services'
 
 export const useSignIn = () =>
-  usePost<{ data: { access_token: string; refresh_token: string } }, ApiLogin>(
-    API_ROUTES.SIGN_IN
+  usePost<AdminSignInResponseDto, AdminSignInRequestBodyDto>(
+    API_ROUTES.ADMIN_SIGN_IN
   )

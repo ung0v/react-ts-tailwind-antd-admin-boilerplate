@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { InfiniteData } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { match } from 'path-to-regexp'
-import { PAGES_TITLE, PAGE_ROUTES } from '~/constants'
+import { DATE_FORMAT, PAGES_TITLE, PAGE_ROUTES } from '~/constants'
 
 export const test = {}
 
@@ -26,4 +27,17 @@ export const handleInfiniteQueryDataList = (data: any) => {
     (prev: any, acc: any) => [...prev, ...acc.data],
     [] as any[]
   )
+}
+
+export const formatDate = (
+  date?: Date | null | string,
+  type?: keyof typeof DATE_FORMAT
+) => {
+  if (!date) {
+    return '-'
+  }
+  if (type) {
+    return dayjs(date).format(DATE_FORMAT[type])
+  }
+  return dayjs(date).format(DATE_FORMAT.DATE)
 }

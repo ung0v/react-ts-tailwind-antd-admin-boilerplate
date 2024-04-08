@@ -22,7 +22,7 @@ export type ISearchState = ISearchParams & {
 export const initialState: ISearchParams = {
   search: '',
   limit: 10,
-  page: 1
+  page: 0
 }
 
 const resetCommon = (state: ISearchState, except: string[] = []) => {

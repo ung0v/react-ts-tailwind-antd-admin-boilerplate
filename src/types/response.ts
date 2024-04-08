@@ -6,12 +6,12 @@ export interface IResponseData<T = Record<string, unknown>> {
 export interface IResponseList<T = object> {
   data: T[]
   message: string
-  pagination: Pagination
+  metadata: Pagination
 }
 
 export interface Pagination {
-  cur_page: number
+  page: number
   limit: number
-  total: number
-  total_page: number
+  totalRecords: number
+  totalPages: number
 }

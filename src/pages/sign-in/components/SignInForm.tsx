@@ -7,7 +7,8 @@ import _ from 'lodash'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useUserStore } from '~/stores'
 import { useSignIn } from '../sign-in.service'
-import { ALL_PAGE_ROUTES } from '~/constants'
+import { ALL_PAGE_ROUTES, EMAIL_REGEX } from '~/constants'
+import { SubmitButton } from '~/components'
 
 export const SignInForm = () => {
   const [searchParams] = useSearchParams()
@@ -15,37 +16,31 @@ export const SignInForm = () => {
   const navigate = useNavigate()
   const { mutateAsync, isPending } = useSignIn()
   const { setToken, setUserStates } = useUserStore()
+
   const [form] = Form.useForm()
+
   const onFinish = (formValues: any) => {
-    navigate(ALL_PAGE_ROUTES.ADMIN_BRAND)
-    setUserStates({ isLogin: true })
-    // mutateAsync(_.pick(formValues, ['username', 'password']))
-    //   .then((res) => {
-    //     if (res.data) {
-    //       const { access_token: accessToken, refresh_token: refreshToken } =
-    //         res.data
-    //       const {
-    //         Name: name,
-    //         Email: email,
-    //         Username: username,
-    //         Address: address,
-    //         RoleID: role
-    //       }: any = jwtDecode(accessToken) || {}
-    //       setToken({ accessToken, refreshToken })
-    //       setUserStates({ isLogin: true, name, email, username, address, role })
-    //       if (returnUrl) {
-    //         navigate(new URL(returnUrl).pathname)
-    //       }
-    //     }
-    //   })
-    //   .catch(() => {
-    //     form.setFields([
-    //       {
-    //         name: ['password'],
-    //         errors: ['Wrong username or password.']
-    //       }
-    //     ])
-    //   })
+    mutateAsync(_.pick(formValues, ['userName', 'password']))
+      .then((res) => {
+        if (res) {
+          const { accessToken, refreshToken } = res
+
+          setToken({ accessToken, refreshToken })
+          setUserStates({ isLogin: true })
+          if (returnUrl) {
+            navigate(new URL(returnUrl).pathname)
+          }
+          navigate(ALL_PAGE_ROUTES.ADMIN_USER_MANAGEMENT)
+        }
+      })
+      .catch(() => {
+        form.setFields([
+          {
+            name: ['password'],
+            errors: ['Email or password is incorrect. Please check again']
+          }
+        ])
+      })
   }
 
   return (
@@ -53,48 +48,50 @@ export const SignInForm = () => {
       form={form}
       name='normal_login'
       className='login-form'
-      initialValues={{ remember: true }}
+      initialValues={{ userName: '', password: '' }}
       onFinish={onFinish}
+      layout='vertical'
     >
       <Form.Item
-        name='username'
+        label='Email'
+        name='userName'
         rules={[
           {
+            // pattern: EMAIL_REGEX,
             required: true,
-            message: 'Please input your username.'
+            message: 'Email is invalid. Please check again'
           }
         ]}
+        className='font-bold'
+        required
       >
         <Input
-          prefix={<UserOutlined className='site-form-item-icon' />}
-          placeholder='Username'
+          prefix={<UserOutlined className='mr-4 text-base' />}
+          placeholder='Email'
         />
       </Form.Item>
       <Form.Item
+        label='Password'
         name='password'
         rules={[{ required: true, message: 'Please input your password.' }]}
+        className='font-bold'
       >
         <Input.Password
-          prefix={<LockOutlined className='site-form-item-icon' />}
+          prefix={<LockOutlined className='mr-4 text-base' />}
           placeholder='Password'
         />
       </Form.Item>
-      <Form.Item>
-        <div className='w-full flex justify-between'>
-          <Form.Item name='remember' valuePropName='checked' noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-
-          <Link className='login-form-forgot' to='/forgot-password'>
-            Forgot password
-          </Link>
-        </div>
-      </Form.Item>
 
       <Form.Item>
-        <Button loading={isPending} type='primary' htmlType='submit' block>
+        <SubmitButton
+          form={form as any}
+          loading={isPending}
+          type='primary'
+          htmlType='submit'
+          block
+        >
           Log in
-        </Button>
+        </SubmitButton>
       </Form.Item>
     </Form>
   )

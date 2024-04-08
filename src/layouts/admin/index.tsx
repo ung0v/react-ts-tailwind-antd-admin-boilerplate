@@ -1,7 +1,8 @@
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  TagsOutlined
+  TagsOutlined,
+  UserOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Breadcrumb, Button, Layout, Menu, Typography, theme } from 'antd'
@@ -22,9 +23,9 @@ const SIDER_WITH_COLLAPSED = 80
 
 const items: MenuProps['items'] = [
   {
-    key: ALL_PAGE_ROUTES.ADMIN_BRAND,
-    icon: <TagsOutlined />,
-    label: `Brand`
+    key: ALL_PAGE_ROUTES.ADMIN_USER_MANAGEMENT,
+    icon: <UserOutlined />,
+    label: `User Management`
   }
 ]
 
@@ -87,12 +88,13 @@ export const AdminLayout = () => {
         }}
       >
         <Header className='h-[60px] bg-white px-6 flex items-center justify-between'>
-          <Button
+          {/* <Button
             type='link'
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             className='h-14 w-14 text-black hover:!text-black'
-          />
+          /> */}
+          <Typography.Title level={5}>{title}</Typography.Title>
 
           <div className='flex items-center gap-x-6'>
             <Typography.Text>Hi, {user.username}</Typography.Text>
@@ -105,26 +107,17 @@ export const AdminLayout = () => {
             margin: '24px 16px',
             padding: 24,
             minHeight: 'calc(100vh - 60px - 48px)',
-            borderRadius: borderRadiusLG
+            borderRadius: borderRadiusLG,
+            background: 'white'
           }}
         >
-          {/* {Array.isArray(title) ? (
-            <Breadcrumb
-              items={title.map((title) => ({
-                title
-              }))}
-            />
-          ) : (
-            <Typography.Title>{title}</Typography.Title>
-          )} */}
-          <Typography.Title className='!mb-6'>{title}</Typography.Title>
-
           <div
-            style={{
-              padding: 16,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG
-            }}
+            style={
+              {
+                // padding: 16,
+                // borderRadius: borderRadiusLG
+              }
+            }
           >
             <Outlet />
           </div>

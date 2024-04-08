@@ -1,1 +1,1 @@
-export * from './evironment'
+export * from './environment'
