@@ -8,7 +8,9 @@ export const API_ROUTES = {
   BRAND_ID: '/brand/:id',
   ADMIN_SIGN_IN: '/admins/auths/sign-in',
   ADMIN_USERS: '/admins/users',
-  ADMIN_USERS_ID: '/admins/users/:userId'
+  ADMIN_USERS_ID: '/admins/users/:userId',
+  ADMIN_CREWS: '/admins/crews',
+  ADMIN_CREWS_ID: '/admins/crews/:crewId'
 } as const
 
 // All Page routes of applications

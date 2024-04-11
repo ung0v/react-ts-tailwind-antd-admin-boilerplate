@@ -1,43 +1,41 @@
 import { Switch, TableProps } from 'antd'
-import { FormModal, ISearchData, Table } from '~/components'
+import { ISearchData, Table } from '~/components'
 import { useI18n } from '~/hooks/useI18n'
 import { useToast } from '~/hooks/useToast'
 import { Modal, useModal } from '~/libs'
-import { useChangeUser, useGetUsers } from './user.service'
+import { useChangeCrew, useGetCrews } from './crew.service'
 import { formatDate } from '~/helpers'
 import { COMMON_DIALOGS } from '~/contexts'
 
-export const UserManagement = () => {
+export const CrewManagement = () => {
   const { t } = useI18n()
   const toast = useToast()
-  const { data, isLoading, refetch } = useGetUsers()
-  const { mutateAsync: changeUser } = useChangeUser()
+  const { data, isLoading, refetch } = useGetCrews()
+  const { mutateAsync: changeCrew } = useChangeCrew()
 
-  const onChangeStatus = async (userId: string, isSpecial: boolean) => {
+  const onChangeStatus = async (crewId: string, isOfficial: boolean) => {
     const isConfirmed = await Modal.show(COMMON_DIALOGS.CONFIRM, {
       title: 'test'
     })
     if (isConfirmed) {
-      await changeUser({ userId, isSpecial: !isSpecial })
+      await changeCrew({ crewId, isOfficial })
       refetch()
     }
   }
 
   const columns: TableProps['columns'] = [
     {
-      title: t('Name'),
+      title: t('Crew Name'),
       key: 'name',
       dataIndex: 'name'
     },
     {
-      title: t('A.k.a'),
-      key: 'aka',
-      dataIndex: 'aka'
-    },
-    {
-      title: t('Gender'),
-      key: 'gender',
-      dataIndex: 'gender'
+      title: t('Leader'),
+      key: 'leader',
+      dataIndex: 'LeaderName',
+      render: (i, row) => {
+        return row.leaderName[0]
+      }
     },
     {
       title: t('Country'),
@@ -45,26 +43,26 @@ export const UserManagement = () => {
       dataIndex: 'country'
     },
     {
-      title: t('Phone number'),
-      key: 'phoneNumber',
-      dataIndex: 'phoneNumber',
-      render: (phone, row) => `${row.countryCode || ''} ${phone || ''}`
+      title: t('Total members'),
+      key: 'Total-members',
+      dataIndex: 'members'
     },
     {
-      title: t('Mail'),
-      key: 'email',
-      dataIndex: 'email'
-    },
-    {
-      title: t('Dancer since'),
-      key: 'debutDate',
-      dataIndex: 'debutDate',
+      title: t('Foundation date'),
+      key: 'foundationDate',
+      dataIndex: 'foundationDate',
       render: (date) => formatDate(date)
     },
     {
-      title: t('Special'),
-      key: 'isSpecial',
-      dataIndex: 'isSpecial',
+      title: t('Created Date'),
+      key: 'createdAt',
+      dataIndex: 'createdAt',
+      render: (date) => formatDate(date)
+    },
+    {
+      title: t('Official'),
+      key: 'isOfficial',
+      dataIndex: 'isOfficial',
       width: '10%',
       render: (_, record) => (
         <Switch value={_} onChange={() => onChangeStatus(record.id, _)} />
@@ -74,10 +72,10 @@ export const UserManagement = () => {
 
   const searchData: ISearchData[] = [
     {
-      label: t('Special'),
+      label: t('Official'),
       options: [
         {
-          name: 'special',
+          name: 'official',
           type: 'select'
         }
       ]
@@ -90,11 +88,9 @@ export const UserManagement = () => {
           type: 'select',
           data: [
             { label: t('All'), value: 'all' },
-            { label: t('A.k.a'), value: 'aka' },
-            { label: t('Country'), value: 'country' },
-            { label: t('Gender'), value: 'gender' },
-            { label: t('Phone number'), value: 'phone' },
-            { label: t('Mail'), value: 'mail' }
+            { label: t('Crew Name'), value: 'name' },
+            { label: t('Leader'), value: 'leader' },
+            { label: t('Country'), value: 'country' }
           ]
         },
         {

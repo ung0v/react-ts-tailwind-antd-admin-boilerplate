@@ -1,7 +1,7 @@
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  TagsOutlined,
+  TeamOutlined,
   UserOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
@@ -26,6 +26,11 @@ const items: MenuProps['items'] = [
     key: ALL_PAGE_ROUTES.ADMIN_USER_MANAGEMENT,
     icon: <UserOutlined />,
     label: `User Management`
+  },
+  {
+    key: ALL_PAGE_ROUTES.ADMIN_CREW_MANAGEMENT,
+    icon: <TeamOutlined />,
+    label: `Crew Management`
   }
 ]
 

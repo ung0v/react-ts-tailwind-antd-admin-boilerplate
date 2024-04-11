@@ -15,6 +15,7 @@
   "Show": "Show",
   "10 results/page": "10 results/page",
   "No": "No",
+  "All": "All",
   "Name": "Name",
   "A.k.a": "A.k.a",
   "Gender": "Gender",
@@ -40,5 +41,6 @@
   "all (default) /official/ un-official": "all (default) /official/ un-official",
   "3010. Crew management > Crew detail (not official)": "3010. Crew management > Crew detail (not official)",
   "Mark as crew official": "Mark as crew official",
-  "Withdraw dancer official": "Withdraw dancer official"
+  "Withdraw dancer official": "Withdraw dancer official",
+  "Total members": "Total members"
 }
