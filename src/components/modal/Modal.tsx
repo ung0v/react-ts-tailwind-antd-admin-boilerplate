@@ -3,6 +3,7 @@ import type { FormProps, ModalProps as ModalAntdProps } from 'antd'
 import { Button, Form, Modal as ModalAntd } from 'antd'
 import { useState } from 'react'
 import { Modal, antdModalV5, useModal } from '~/libs'
+import './Modal.css'
 
 type ModalProps = ModalAntdProps & {
   // TODO
@@ -36,11 +37,12 @@ export const CommonModal = Modal.create(
 
     return (
       <ModalAntd
-        title='Hello Antd'
+        className='Modal'
         {...antdModalV5(modal)}
         {...props}
         onCancel={handleOnCancel}
         onOk={handleOnOk}
+        closeIcon={null}
       >
         {children}
       </ModalAntd>

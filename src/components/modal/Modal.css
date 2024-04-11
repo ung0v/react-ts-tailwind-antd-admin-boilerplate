@@ -1,0 +1,22 @@
+.Modal {
+  @apply max-w-[500px];
+  .ant-modal-content {
+    @apply flex flex-col;
+    min-height: 256px;
+  }
+  .ant-modal-body {
+    @apply flex-1 flex items-center justify-center text-base;
+  }
+  .ant-modal-footer {
+    @apply mt-auto flex justify-center gap-[30px];
+    button {
+      @apply h-[56px] min-w-[146px] text-base font-bold;
+    }
+    button:first-of-type {
+      /* @apply bg-black; */
+    }
+    button:last-of-type {
+      @apply !ml-0;
+    }
+  }
+}

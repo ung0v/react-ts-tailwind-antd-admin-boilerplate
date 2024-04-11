@@ -11,6 +11,7 @@ import {
   NotFoundPage,
   SignIn,
   SignUp,
+  UserDetail,
   UserManagement
 } from '../pages'
 
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
           {
             path: ALL_PAGE_ROUTES.ADMIN_USER_MANAGEMENT,
             element: <UserManagement />
+          },
+          {
+            path: ALL_PAGE_ROUTES.ADMIN_USER_DETAIL,
+            element: <UserDetail />
           },
           {
             path: ALL_PAGE_ROUTES.ADMIN_CREW_MANAGEMENT,

@@ -26,6 +26,7 @@ export const PAGE_ROUTES = {
   PRIVATE: {
     ADMIN_HOME: '/admin/',
     ADMIN_USER_MANAGEMENT: '/admin/user',
+    ADMIN_USER_DETAIL: '/admin/user/:userId',
     ADMIN_CREW_MANAGEMENT: '/admin/crew'
   }
 }

@@ -1,21 +1,23 @@
 import { Switch, TableProps } from 'antd'
-import { FormModal, ISearchData, Table } from '~/components'
-import { useI18n } from '~/hooks/useI18n'
-import { useToast } from '~/hooks/useToast'
-import { Modal, useModal } from '~/libs'
-import { useChangeUser, useGetUsers } from './user.service'
-import { formatDate } from '~/helpers'
+import { ISearchData, Table } from '~/components'
 import { COMMON_DIALOGS } from '~/contexts'
+import { formatDate, pathToUrl } from '~/helpers'
+import { useI18n } from '~/hooks/useI18n'
+import { Modal } from '~/libs'
+import { useChangeUser, useGetUsers } from './user.service'
+import { Link } from 'react-router-dom'
+import { ALL_PAGE_ROUTES } from '~/constants'
 
 export const UserManagement = () => {
   const { t } = useI18n()
-  const toast = useToast()
   const { data, isLoading, refetch } = useGetUsers()
   const { mutateAsync: changeUser } = useChangeUser()
 
   const onChangeStatus = async (userId: string, isSpecial: boolean) => {
     const isConfirmed = await Modal.show(COMMON_DIALOGS.CONFIRM, {
-      title: 'test'
+      children: isSpecial
+        ? t('Are you sure to withdraw this dancer special?')
+        : t('Are you sure to mark this dancer special?')
     })
     if (isConfirmed) {
       await changeUser({ userId, isSpecial: !isSpecial })
@@ -27,7 +29,15 @@ export const UserManagement = () => {
     {
       title: t('Name'),
       key: 'name',
-      dataIndex: 'name'
+      dataIndex: 'name',
+      render: (name, row) => (
+        <Link
+          className='underline text-black hover:text-black'
+          to={pathToUrl(ALL_PAGE_ROUTES.ADMIN_USER_DETAIL, { userId: row.id })}
+        >
+          {name}
+        </Link>
+      )
     },
     {
       title: t('A.k.a'),
@@ -112,6 +122,7 @@ export const UserManagement = () => {
       dataSource={data?.data}
       total={data?.metadata.totalRecords}
       searchData={searchData}
+      shouldIndexedNumber
     />
   )
 }

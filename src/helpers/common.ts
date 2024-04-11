@@ -41,3 +41,13 @@ export const formatDate = (
   }
   return dayjs(date).format(DATE_FORMAT.DATE)
 }
+
+export const handleParamsBeforeSubmit = (params: object): any => {
+  const searchParams =
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    filterObject(params, ([key, value]: [key: any, value: any]) => {
+      return typeof value === 'number' || !!value
+    }) || {}
+  console.log(searchParams)
+  return searchParams
+}

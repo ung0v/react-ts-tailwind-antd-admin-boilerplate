@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from 'zustand'
+import { DEFAULT_SEARCH_PARAMS } from '~/constants'
 
 export type ISearchParams = {
-  search: string
   limit: number
   page: number
   [key: string]: any
@@ -20,9 +20,8 @@ export type ISearchState = ISearchParams & {
 }
 
 export const initialState: ISearchParams = {
-  search: '',
-  limit: 10,
-  page: 0
+  limit: DEFAULT_SEARCH_PARAMS.LIMIT,
+  page: DEFAULT_SEARCH_PARAMS.PAGE
 }
 
 const resetCommon = (state: ISearchState, except: string[] = []) => {

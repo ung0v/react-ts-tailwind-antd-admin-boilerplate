@@ -8,6 +8,7 @@ import { filterObject } from '~/helpers'
 import { useFetch } from '~/services'
 import { useSearchStore } from '~/stores'
 import { IResponseList } from '~/types'
+import { useSearch } from './useSearch'
 
 export const useGetList = <ReturnType>(
   url: string,
@@ -20,19 +21,14 @@ export const useGetList = <ReturnType>(
     _.pickBy(state, (search) => typeof search !== 'function')
   )
 
-  const searchParams = filterObject(
-    searchState,
-    ([key, value]: [key: any, value: any]) => {
-      return typeof value === 'number' || !!value
-    }
-  )
+  const { currentSearchParams: searchParams } = useSearch()
 
   const result = useFetch<IResponseList<ReturnType>>(
     url,
     { ...searchParams, ...(params || {}) },
     {
       enabled: !!(
-        Object.keys(searchState).length > 0 &&
+        Object.keys(searchParams).length > 0 &&
         !_.isEqual(prevParams.current, searchParams) &&
         enabled
       ),
