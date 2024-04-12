@@ -1,24 +1,26 @@
 import { Switch, TableProps } from 'antd'
+import { Link } from 'react-router-dom'
 import { ISearchData, Table } from '~/components'
-import { useI18n } from '~/hooks/useI18n'
-import { useToast } from '~/hooks/useToast'
-import { Modal, useModal } from '~/libs'
-import { useChangeCrew, useGetCrews } from './crew.service'
-import { formatDate } from '~/helpers'
+import { ALL_PAGE_ROUTES } from '~/constants'
 import { COMMON_DIALOGS } from '~/contexts'
+import { formatDate, pathToUrl } from '~/helpers'
+import { useI18n } from '~/hooks/useI18n'
+import { Modal } from '~/libs'
+import { useChangeCrew, useGetCrews } from './crew.service'
 
 export const CrewManagement = () => {
   const { t } = useI18n()
-  const toast = useToast()
   const { data, isLoading, refetch } = useGetCrews()
   const { mutateAsync: changeCrew } = useChangeCrew()
 
   const onChangeStatus = async (crewId: string, isOfficial: boolean) => {
     const isConfirmed = await Modal.show(COMMON_DIALOGS.CONFIRM, {
-      title: 'test'
+      children: isOfficial
+        ? t('Are you sure to withdraw this crew official?')
+        : t('Are you sure to mark this crew official?')
     })
     if (isConfirmed) {
-      await changeCrew({ crewId, isOfficial })
+      await changeCrew({ crewId, isOfficial: !isOfficial })
       refetch()
     }
   }
@@ -27,25 +29,45 @@ export const CrewManagement = () => {
     {
       title: t('Crew Name'),
       key: 'name',
-      dataIndex: 'name'
+      dataIndex: 'name',
+      render: (name, row) => (
+        <Link
+          className='underline text-black hover:text-black'
+          to={pathToUrl(ALL_PAGE_ROUTES.ADMIN_CREW_DETAIL, { crewId: row.id })}
+        >
+          {name}
+        </Link>
+      ),
+      width: '15%'
     },
     {
       title: t('Leader'),
-      key: 'leader',
-      dataIndex: 'LeaderName',
-      render: (i, row) => {
-        return row.leaderName[0]
-      }
+      key: 'leaderName',
+      dataIndex: 'leaderName',
+      render: (leaderName, row) => (
+        <Link
+          className='underline text-black hover:text-black'
+          to={pathToUrl(ALL_PAGE_ROUTES.ADMIN_USER_DETAIL, {
+            userId: row.leaderId
+          })}
+        >
+          {leaderName}
+        </Link>
+      ),
+
+      width: '10%'
     },
     {
       title: t('Country'),
       key: 'country',
-      dataIndex: 'country'
+      dataIndex: 'country',
+      ellipsis: true
     },
     {
       title: t('Total members'),
       key: 'Total-members',
-      dataIndex: 'members'
+      dataIndex: 'members',
+      render: (members) => Number(members.length)
     },
     {
       title: t('Foundation date'),
@@ -75,8 +97,13 @@ export const CrewManagement = () => {
       label: t('Official'),
       options: [
         {
-          name: 'official',
-          type: 'select'
+          name: 'isOfficial',
+          type: 'select',
+          data: [
+            { label: t('All'), value: '' },
+            { label: '오피셜', value: true },
+            { label: '일반', value: false }
+          ]
         }
       ]
     },
@@ -108,6 +135,7 @@ export const CrewManagement = () => {
       dataSource={data?.data}
       total={data?.metadata.totalRecords}
       searchData={searchData}
+      shouldIndexedNumber
     />
   )
 }

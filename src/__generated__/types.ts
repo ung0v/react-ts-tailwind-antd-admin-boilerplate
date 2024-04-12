@@ -32,8 +32,6 @@ export interface Metadata {
   totalPages: number
 }
 
-export type ObjectId = object
-
 export interface UserDto {
   id: string
   name: string
@@ -42,7 +40,6 @@ export interface UserDto {
   type: string
   loginPlatform: string
   contactEmail: string
-  _id: ObjectId
   isVisibleName: boolean
   aka?: string
   gender?: string
@@ -65,12 +62,13 @@ export interface UserDto {
   /** @format date-time */
   dateOfBirth?: string
   isVisibleDateOfBirth: boolean
-  showedBadges: ObjectId[]
+  showedBadges: string[]
   profileImages: string[]
   /** @format date-time */
   deletedAt?: string
   isVerified: boolean
   isActive: boolean
+  isSpecial: boolean
   /** @format date-time */
   createdAt: string
   /** @format date-time */
@@ -86,22 +84,38 @@ export interface AdminEditUserRequestDto {
   isSpecial: boolean
 }
 
-export interface UserInfoDto {
+export interface Badge {
+  id: string
+  name?: string
+  image: string
+  type: 'Welcome' | 'Dancer' | 'Joined' | 'Reward'
+}
+
+export interface ProfileActivity {
+  id: string
+  description: string
+  title?: string
+  /** @format date-time */
+  startDate?: string
+  /** @format date-time */
+  endDate?: string
+  dateRangeType?: 'Year' | 'Month'
+  /** @format date-time */
+  specificDate?: string
+  /** @format date-time */
+  createdAt: string
+}
+
+export interface AdminGetUserProfileResponseDto {
   id: string
   name: string
-  userName: string
-  email: string
-  type: string
-  loginPlatform: string
-  contactEmail: string
-  _id: ObjectId
   isVisibleName: boolean
   aka?: string
-  gender?: string
+  gender?: 'Male' | 'Female' | 'Other'
   isVisibleGender: boolean
   image?: string
-  role: string
-  userPlatformId?: string
+  type: 'Default' | 'Dancer' | 'Mc' | 'Dj'
+  role: 'Default' | 'Dancer' | 'DancerCrewLeader' | 'CrewLeader'
   country?: string
   isVisibleCountry: boolean
   countryCode?: string
@@ -111,22 +125,19 @@ export interface UserInfoDto {
   fields: string[]
   /** @format date-time */
   debutDate?: string
+  email?: string
+  contactEmail?: string
   isVisibleEmail: boolean
   link?: string
   video?: string
   /** @format date-time */
   dateOfBirth?: string
   isVisibleDateOfBirth: boolean
-  showedBadges: ObjectId[]
+  showedBadges: Badge[]
   profileImages: string[]
-  /** @format date-time */
-  deletedAt?: string
   isVerified: boolean
   isActive: boolean
-  /** @format date-time */
-  createdAt: string
-  /** @format date-time */
-  updatedAt: string
+  activities: ProfileActivity[]
 }
 
 export interface AdminSignInRequestBodyDto {
@@ -162,7 +173,7 @@ export interface CrewProfileActivity {
   createdAt: string
 }
 
-export interface UserGetCrewDetailResponseDto {
+export interface AdminGetCrewDetailResponseDto {
   id: string
   isLeader: boolean
   leaderId: string
@@ -173,6 +184,7 @@ export interface UserGetCrewDetailResponseDto {
   link?: string
   country?: string
   badgeEditable: boolean
+  isOfficial: boolean
   fields?: string[]
   /** @format date-time */
   foundationDate: string
@@ -185,7 +197,7 @@ export interface UserGetCrewDetailResponseDto {
   updatedAt: string
 }
 
-export interface Crew {
+export interface AdminCrew {
   id: string
   isLeader: boolean
   leaderId: string
@@ -195,27 +207,27 @@ export interface Crew {
   image?: string
   link?: string
   country?: string
-  badgeEditable: boolean
   fields?: string[]
   /** @format date-time */
   foundationDate: string
   activities: CrewProfileActivity[]
-  view: 'CrewLeader' | 'Invited' | 'NotMember' | 'Member'
-  invitationId?: string
+  isOfficial: boolean
+  members: string[]
   /** @format date-time */
   createdAt: string
   /** @format date-time */
   updatedAt: string
 }
 
-export interface CrewListResponseDto {
+export interface AdminGetCrewListResponseDto {
   metadata: Metadata
-  data: Crew[]
+  data: AdminCrew[]
 }
 
 export interface RedirectSignInSocialsBodyDto {
   code: string
   id_token?: string
+  state?: string
 }
 
 export interface UserRefreshRequestBodyDto {
@@ -248,28 +260,6 @@ export interface UpdateProfileRequestBodyDto {
 export interface UpdatePasswordRequestBodyDto {
   oldPassword: string
   newPassword: string
-}
-
-export interface Badge {
-  id: string
-  name?: string
-  image: string
-  type: 'Welcome' | 'Dancer' | 'Joined' | 'Reward'
-}
-
-export interface ProfileActivity {
-  id: string
-  description: string
-  title?: string
-  /** @format date-time */
-  startDate?: string
-  /** @format date-time */
-  endDate?: string
-  dateRangeType?: 'Year' | 'Month'
-  /** @format date-time */
-  specificDate?: string
-  /** @format date-time */
-  createdAt: string
 }
 
 export interface UserProfileResponseDto {
@@ -306,7 +296,12 @@ export interface UserProfileResponseDto {
   activities: ProfileActivity[]
 }
 
-export interface EventPreview {
+export interface UserActivitiesCountResponseDto {
+  totalEvent: number
+  totalCrew: number
+}
+
+export interface JoinedEventPreview {
   id: string
   image: string
   name: string
@@ -319,52 +314,23 @@ export interface EventPreview {
     | 'ManualAttended'
     | 'WaitingToCancel'
     | 'CancelConfirmed'
+}
+
+export interface UserJoinedEventsPreviewListResponseDto {
+  metadata: Metadata
+  data: JoinedEventPreview[]
+}
+
+export interface EventPreview {
+  id: string
+  image: string
+  name: string
   isDrafting: boolean
 }
 
 export interface UserEventsPreviewListResponseDto {
   metadata: Metadata
   data: EventPreview[]
-}
-
-export interface UserEvent {
-  id: string
-  leaderId: string
-  type: 'Watching' | 'Joining'
-  image: string
-  name: string
-  introduction: string
-  /** @format date-time */
-  startDate: string
-  /** @format date-time */
-  endDate: string
-  /** @format date-time */
-  registerDate: string
-  capacity: number
-  location: string
-  locationDescription?: string
-  fields: string[]
-  eventRule: string
-  roundIntroduction: string
-  host?: string
-  judge?: string
-  dj?: string
-  mc?: string
-  description: string
-  joinedBadgeImage: string
-  link?: string
-  contact: string
-  price: number
-  bankName?: string
-  accountName?: string
-  accountNumber?: string
-  /** @format date-time */
-  createdAt: string
-}
-
-export interface UserEventsListResponseDto {
-  metadata: Metadata
-  data: UserEvent[]
 }
 
 export interface BadgeDto {
@@ -377,6 +343,12 @@ export interface BadgeDto {
 export interface UserBadgeListResponseDto {
   metadata: Metadata
   data: BadgeDto[]
+}
+
+export interface Crew {
+  id: string
+  image: string
+  name: string
 }
 
 export interface UserCrewsListResponseDto {
@@ -401,6 +373,21 @@ export interface UserChangeInvitationStatusRequestDto {
   status: 'Accepted' | 'Rejected'
 }
 
+export interface UserEditProfileActivityRequestDto {
+  contactEmail: string
+  isVisibleEmail: boolean
+  name?: string | null
+  isVisibleName: boolean
+  country?: string | null
+  isVisibleCountry: boolean
+  gender?: 'Male' | 'Female' | 'Other' | null
+  isVisibleGender: boolean
+  /** @format date-time */
+  dateOfBirth?: string | null
+  isVisibleDateOfBirth: boolean
+  introduction?: string | null
+}
+
 export interface CreateProfileActivity {
   id?: string
   description: string
@@ -414,7 +401,7 @@ export interface CreateProfileActivity {
   dateRangeType?: 'Year' | 'Month'
 }
 
-export interface UserEditProfileActivityRequestDto {
+export interface UserEditProfileDancerActivityRequestDto {
   contactEmail?: string
   isVisibleEmail: boolean
   name: string
@@ -464,6 +451,46 @@ export interface RegisterDancerRequestBodyDto {
   introduction: string
   /** @default [] */
   activities?: Activity[]
+}
+
+export interface UserEvent {
+  id: string
+  leaderId: string
+  type: 'Watching' | 'Joining'
+  image: string
+  name: string
+  introduction: string
+  /** @format date-time */
+  startDate: string
+  /** @format date-time */
+  endDate: string
+  /** @format date-time */
+  registerDate: string
+  capacity: number
+  location: string
+  locationDescription?: string
+  fields: string[]
+  eventRule: string
+  roundIntroduction: string
+  host?: string
+  judge?: string
+  dj?: string
+  mc?: string
+  description: string
+  joinedBadgeImage: string
+  link?: string
+  contact: string
+  price: number
+  bankName?: string
+  accountName?: string
+  accountNumber?: string
+  /** @format date-time */
+  createdAt: string
+}
+
+export interface UserEventsListResponseDto {
+  metadata: Metadata
+  data: UserEvent[]
 }
 
 export interface UserTag {
@@ -525,6 +552,7 @@ export interface UserGetEventDetailResponseDto {
     | 'Approved'
     | 'EventExpired'
     | 'Attended'
+  isLeader: boolean
   /** @format date-time */
   createdAt: string
   /** @format date-time */
@@ -748,6 +776,29 @@ export interface EditEventRewardRequestDto {
   members?: string[]
 }
 
+export interface UserGetCrewDetailResponseDto {
+  id: string
+  isLeader: boolean
+  leaderId: string
+  leaderName: string
+  leaderImage: string
+  name: string
+  image?: string
+  link?: string
+  country?: string
+  badgeEditable: boolean
+  fields?: string[]
+  /** @format date-time */
+  foundationDate: string
+  activities: CrewProfileActivity[]
+  view: 'CrewLeader' | 'Invited' | 'NotMember' | 'Member'
+  invitationId?: string
+  /** @format date-time */
+  createdAt: string
+  /** @format date-time */
+  updatedAt: string
+}
+
 export interface CreateCrewActivity {
   title: string
   /** @format date-time */
@@ -829,7 +880,8 @@ export interface User {
   id: string
   image?: string
   name: string
-  type: 'Default' | 'Dancer' | 'DancerCrewLeader' | 'CrewLeader'
+  isVisibleName: boolean
+  type: 'Default' | 'Dancer' | 'Mc' | 'Dj'
   /** @default [] */
   showedBadges: PublicShowedBadge[]
   introduction?: string
@@ -894,11 +946,50 @@ export interface CheckRegisteredPhoneNumberRequestDto {
   phoneNumber: string
 }
 
+export interface PublicUserActivitiesCountResponseDto {
+  totalEvent: number
+  totalCrew: number
+}
+
+export interface PublicEventPreview {
+  id: string
+  image: string
+  name: string
+}
+
+export interface PublicUserEventsPreviewListResponseDto {
+  metadata: Metadata
+  data: PublicEventPreview[]
+}
+
+export interface PublicJoinedEventPreview {
+  id: string
+  image: string
+  name: string
+}
+
+export interface PublicUserJoinedEventsPreviewListResponseDto {
+  metadata: Metadata
+  data: PublicJoinedEventPreview[]
+}
+
+export interface PublicCrewPreview {
+  id: string
+  image: string
+  name: string
+}
+
+export interface PublicUserCrewsListResponseDto {
+  metadata: Metadata
+  data: PublicCrewPreview[]
+}
+
 export interface PublicEvent {
   id: string
   name: string
   image: string
   location: string
+  locationDescription?: string
   /** @format date-time */
   registerDate: string
   /** @format date-time */
@@ -1301,7 +1392,7 @@ export class Api<
      * @secure
      */
     usersControllerGetUserList: (
-      query: {
+      query?: {
         /**
          * order of page
          * @default 0
@@ -1314,7 +1405,8 @@ export class Api<
          * @default 1
          */
         limit?: number
-        searchIn: 'all' | 'aka' | 'country' | 'gender' | 'phone' | 'mail'
+        isSpecial?: string
+        searchIn?: 'all' | 'aka' | 'country' | 'gender' | 'phone' | 'mail'
         search?: string
       },
       params: RequestParams = {}
@@ -1362,7 +1454,7 @@ export class Api<
       userId: string,
       params: RequestParams = {}
     ) =>
-      this.request<UserInfoDto, any>({
+      this.request<AdminGetUserProfileResponseDto, any>({
         path: `/admins/users/${userId}`,
         method: 'GET',
         secure: true,
@@ -1419,7 +1511,7 @@ export class Api<
      * @secure
      */
     authsControllerGetProfile: (params: RequestParams = {}) =>
-      this.request<ObjectId, any>({
+      this.request<object, any>({
         path: `/admins/auths/me`,
         method: 'GET',
         secure: true,
@@ -1461,7 +1553,7 @@ export class Api<
       crewId: string,
       params: RequestParams = {}
     ) =>
-      this.request<UserGetCrewDetailResponseDto, any>({
+      this.request<AdminGetCrewDetailResponseDto, any>({
         path: `/admins/crews/${crewId}`,
         method: 'GET',
         secure: true,
@@ -1478,7 +1570,7 @@ export class Api<
      * @secure
      */
     crewsControllerGetCrewList: (
-      query: {
+      query?: {
         /**
          * order of page
          * @default 0
@@ -1491,12 +1583,13 @@ export class Api<
          * @default 1
          */
         limit?: number
-        searchIn: 'all' | 'name' | 'leader' | 'country'
+        isOfficial?: string
+        searchIn?: 'all' | 'name' | 'leader' | 'country'
         search?: string
       },
       params: RequestParams = {}
     ) =>
-      this.request<CrewListResponseDto, any>({
+      this.request<AdminGetCrewListResponseDto, any>({
         path: `/admins/crews`,
         method: 'GET',
         query: query,
@@ -1612,6 +1705,22 @@ export class Api<
      * No description
      *
      * @tags Users
+     * @name AuthsControllerDeleteProfile
+     * @request DELETE:/users/auths
+     * @secure
+     */
+    authsControllerDeleteProfile: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/users/auths`,
+        method: 'DELETE',
+        secure: true,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
      * @name AuthsControllerUpdatePassword
      * @request PUT:/users/auths/passwords
      * @secure
@@ -1650,36 +1759,16 @@ export class Api<
      * No description
      *
      * @tags Users
-     * @name ProfilesControllerDeleteProfile
-     * @request DELETE:/users/profiles
+     * @name ProfilesControllerActivitiesCount
+     * @request GET:/users/profiles/activities-count
      * @secure
      */
-    profilesControllerDeleteProfile: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/users/profiles`,
-        method: 'DELETE',
+    profilesControllerActivitiesCount: (params: RequestParams = {}) =>
+      this.request<UserActivitiesCountResponseDto, any>({
+        path: `/users/profiles/activities-count`,
+        method: 'GET',
         secure: true,
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Users
-     * @name ProfilesControllerEditProfile
-     * @request PUT:/users/profiles
-     * @secure
-     */
-    profilesControllerEditProfile: (
-      data: UserEditProfileActivityRequestDto,
-      params: RequestParams = {}
-    ) =>
-      this.request<void, any>({
-        path: `/users/profiles`,
-        method: 'PUT',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
+        format: 'json',
         ...params
       }),
 
@@ -1709,7 +1798,7 @@ export class Api<
       },
       params: RequestParams = {}
     ) =>
-      this.request<UserEventsPreviewListResponseDto, any>({
+      this.request<UserJoinedEventsPreviewListResponseDto, any>({
         path: `/users/profiles/joined-events`,
         method: 'GET',
         query: query,
@@ -1744,7 +1833,7 @@ export class Api<
       },
       params: RequestParams = {}
     ) =>
-      this.request<UserEventsListResponseDto, any>({
+      this.request<UserEventsPreviewListResponseDto, any>({
         path: `/users/profiles/my-events`,
         method: 'GET',
         query: query,
@@ -1904,6 +1993,48 @@ export class Api<
     ) =>
       this.request<void, any>({
         path: `/users/profiles/invited-crews/${invitationId}`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name ProfilesControllerEditProfile
+     * @request PUT:/users/profiles/edit-profile
+     * @secure
+     */
+    profilesControllerEditProfile: (
+      data: UserEditProfileActivityRequestDto,
+      params: RequestParams = {}
+    ) =>
+      this.request<void, any>({
+        path: `/users/profiles/edit-profile`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name ProfilesControllerEditProfileDancer
+     * @request PUT:/users/profiles/edit-dancer
+     * @secure
+     */
+    profilesControllerEditProfileDancer: (
+      data: UserEditProfileDancerActivityRequestDto,
+      params: RequestParams = {}
+    ) =>
+      this.request<void, any>({
+        path: `/users/profiles/edit-dancer`,
         method: 'PUT',
         body: data,
         secure: true,
@@ -2517,6 +2648,7 @@ export class Api<
         /** @default "" */
         search?: string
         excludeCrewId?: string
+        eventId?: string
       },
       params: RequestParams = {}
     ) =>
@@ -2559,6 +2691,123 @@ export class Api<
         method: 'POST',
         body: data,
         type: ContentType.Json,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Publics
+     * @name UsersControllerUserActivitiesCount
+     * @request GET:/publics/users/{userId}/activities-count
+     */
+    usersControllerUserActivitiesCount: (
+      userId: string,
+      params: RequestParams = {}
+    ) =>
+      this.request<PublicUserActivitiesCountResponseDto, any>({
+        path: `/publics/users/${userId}/activities-count`,
+        method: 'GET',
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Publics
+     * @name UsersControllerUserEventsList
+     * @request GET:/publics/users/{userId}/my-events
+     */
+    usersControllerUserEventsList: (
+      userId: string,
+      query?: {
+        /**
+         * order of page
+         * @default 0
+         */
+        page?: number
+        /**
+         * number of resources per page
+         * @min 1
+         * @max 100
+         * @default 1
+         */
+        limit?: number
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<PublicUserEventsPreviewListResponseDto, any>({
+        path: `/publics/users/${userId}/my-events`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Publics
+     * @name UsersControllerUserJoinedEventsList
+     * @request GET:/publics/users/{userId}/joined-events
+     */
+    usersControllerUserJoinedEventsList: (
+      userId: string,
+      query?: {
+        /**
+         * order of page
+         * @default 0
+         */
+        page?: number
+        /**
+         * number of resources per page
+         * @min 1
+         * @max 100
+         * @default 1
+         */
+        limit?: number
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<PublicUserJoinedEventsPreviewListResponseDto, any>({
+        path: `/publics/users/${userId}/joined-events`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Publics
+     * @name UsersControllerUserJoinedCrewsList
+     * @request GET:/publics/users/{userId}/joined-crews
+     */
+    usersControllerUserJoinedCrewsList: (
+      userId: string,
+      query?: {
+        /**
+         * order of page
+         * @default 0
+         */
+        page?: number
+        /**
+         * number of resources per page
+         * @min 1
+         * @max 100
+         * @default 1
+         */
+        limit?: number
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<PublicUserCrewsListResponseDto, any>({
+        path: `/publics/users/${userId}/joined-crews`,
+        method: 'GET',
+        query: query,
+        format: 'json',
         ...params
       }),
 

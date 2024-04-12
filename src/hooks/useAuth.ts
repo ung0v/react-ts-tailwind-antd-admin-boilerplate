@@ -13,7 +13,7 @@ export const useAuth = () => {
     if (isLogin) {
       if (pathname === ALL_PAGE_ROUTES.SIGN_IN) {
         if (role === ROLE.ADMIN) {
-          navigate(ALL_PAGE_ROUTES.ADMIN_BRAND)
+          navigate(ALL_PAGE_ROUTES.ADMIN_HOME)
         }
       }
     } else {

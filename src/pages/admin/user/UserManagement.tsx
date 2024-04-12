@@ -37,12 +37,14 @@ export const UserManagement = () => {
         >
           {name}
         </Link>
-      )
+      ),
+      width: '15%'
     },
     {
       title: t('A.k.a'),
       key: 'aka',
-      dataIndex: 'aka'
+      dataIndex: 'aka',
+      width: '10%'
     },
     {
       title: t('Gender'),
@@ -59,6 +61,7 @@ export const UserManagement = () => {
       key: 'phoneNumber',
       dataIndex: 'phoneNumber',
       render: (phone, row) => `${row.countryCode || ''} ${phone || ''}`
+      // width: '15%'
     },
     {
       title: t('Mail'),
@@ -87,8 +90,13 @@ export const UserManagement = () => {
       label: t('Special'),
       options: [
         {
-          name: 'special',
-          type: 'select'
+          name: 'isSpecial',
+          type: 'select',
+          data: [
+            { label: t('All'), value: '' },
+            { label: '스페셜', value: true },
+            { label: '일반', value: false }
+          ]
         }
       ]
     },

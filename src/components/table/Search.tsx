@@ -24,7 +24,7 @@ export interface ISearchData {
 export interface ISearchItem {
   type: ISearchType
   name: string
-  data?: Array<{ label: string; value: string | number }>
+  data?: Array<{ label: string; value: string | number | boolean }>
   placeholder?: string
 }
 
@@ -51,7 +51,13 @@ export const SearchTable = ({ searchData, total = 0 }: SearchProps) => {
   const renderInput = (input: ISearchItem) => {
     switch (input.type) {
       case 'select':
-        return <Select className='min-w-[160px]' options={input.data} />
+        return (
+          <Select
+            className='min-w-[160px]'
+            options={input.data}
+            defaultValue={input?.data?.[0].value}
+          />
+        )
       case 'text':
         return <Input />
       default:
@@ -96,8 +102,6 @@ export const SearchTable = ({ searchData, total = 0 }: SearchProps) => {
       key: '100'
     }
   ]
-
-  console.log(pageSize)
 
   return (
     <>

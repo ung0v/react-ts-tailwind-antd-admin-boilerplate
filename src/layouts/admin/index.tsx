@@ -15,26 +15,15 @@ import { useSearchStore, useSharedStore, useUserStore } from '~/stores'
 import { useMenuTitle } from '~/hooks/useMenuTitle'
 import { useLogout } from '~/hooks/useLogout'
 import { MenuAccount } from '../common/MenuAccount'
+import { useI18n } from '~/hooks/useI18n'
 
 const { Header, Content, Footer, Sider } = Layout
 
 const SIDER_WITH = 200
 const SIDER_WITH_COLLAPSED = 80
 
-const items: MenuProps['items'] = [
-  {
-    key: ALL_PAGE_ROUTES.ADMIN_USER_MANAGEMENT,
-    icon: <UserOutlined />,
-    label: `User Management`
-  },
-  {
-    key: ALL_PAGE_ROUTES.ADMIN_CREW_MANAGEMENT,
-    icon: <TeamOutlined />,
-    label: `Crew Management`
-  }
-]
-
 export const AdminLayout = () => {
+  const { t } = useI18n()
   const navigate = useNavigate()
   useMenuTitle()
   const [collapsed, setCollapsed] = useState(false)
@@ -48,6 +37,19 @@ export const AdminLayout = () => {
   const { reset } = useSearchStore()
   const user = useUserStore()
   const logout = useLogout()
+
+  const items: MenuProps['items'] = [
+    {
+      key: ALL_PAGE_ROUTES.ADMIN_USER_MANAGEMENT,
+      icon: <UserOutlined />,
+      label: t('User Management')
+    },
+    {
+      key: ALL_PAGE_ROUTES.ADMIN_CREW_MANAGEMENT,
+      icon: <TeamOutlined />,
+      label: t('Crew Management')
+    }
+  ]
 
   const selectedKeys = useMemo(() => {
     return [items.find((item) => item?.key === pathname)?.key as string]

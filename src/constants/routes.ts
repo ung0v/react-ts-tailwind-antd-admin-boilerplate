@@ -27,7 +27,9 @@ export const PAGE_ROUTES = {
     ADMIN_HOME: '/admin/',
     ADMIN_USER_MANAGEMENT: '/admin/user',
     ADMIN_USER_DETAIL: '/admin/user/:userId',
-    ADMIN_CREW_MANAGEMENT: '/admin/crew'
+    ADMIN_CREW_MANAGEMENT: '/admin/crew',
+    ADMIN_CREW_DETAIL: '/admin/crew/:crewId',
+    ADMIN_CREW_USER_DETAIL: '/admin/crew/:crewId/user/:userId'
   }
 }
 

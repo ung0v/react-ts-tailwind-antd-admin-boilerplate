@@ -7,7 +7,9 @@ import { AuthProvider } from '.'
 import { ALL_PAGE_ROUTES } from '../constants'
 import { AdminLayout, CommonLayout } from '../layouts'
 import {
+  CrewDetail,
   CrewManagement,
+  CrewUserDetail,
   NotFoundPage,
   SignIn,
   SignUp,
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
           {
             path: ALL_PAGE_ROUTES.ADMIN_CREW_MANAGEMENT,
             element: <CrewManagement />
+          },
+          {
+            path: ALL_PAGE_ROUTES.ADMIN_CREW_DETAIL,
+            element: <CrewDetail />
+          },
+          {
+            path: ALL_PAGE_ROUTES.ADMIN_CREW_USER_DETAIL,
+            element: <CrewUserDetail />
           }
         ]
       }

@@ -7,3 +7,10 @@ export enum LOCALES {
   ENGLIGH = 'en',
   KOREAN = 'ko'
 }
+
+export enum UserRole {
+  Default = 'Default',
+  Dancer = 'Dancer',
+  DancerCrewLeader = 'DancerCrewLeader',
+  CrewLeader = 'CrewLeader'
+}

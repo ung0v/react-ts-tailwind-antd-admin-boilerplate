@@ -61,22 +61,28 @@ export const Table = <T extends object>({
     handleChangeSearch({ key: KEY_SEARCH.page, value: page - 1 })
   }
 
-  const columns = useMemo(
-    () => [
-      shouldIndexedNumber
-        ? {
-            title: t('No'),
-            key: 'no',
-            dataIndex: 'no',
-            render: (_: any, __: any, idx: number) => {
-              return (currentPage <= 0 ? 0 : currentPage) * 10 + idx + 1
-            }
-          }
-        : {},
-      ...(props.columns as any)
-    ],
-    [shouldIndexedNumber, props.columns, i18n.language, currentPage]
-  )
+  const columns = useMemo(() => {
+    let finalColumns = props.columns?.map((column) => ({
+      ...column,
+      align: column.align || 'center'
+    })) as any
+    if (shouldIndexedNumber) {
+      finalColumns = [
+        {
+          title: t('No'),
+          key: 'no',
+          dataIndex: 'no',
+          render: (_: any, __: any, idx: number) => {
+            return (currentPage <= 0 ? 0 : currentPage) * 10 + idx + 1
+          },
+          width: '10%',
+          align: 'center'
+        },
+        ...finalColumns
+      ]
+    }
+    return finalColumns
+  }, [shouldIndexedNumber, props.columns, i18n.language, currentPage])
 
   return (
     <div>
